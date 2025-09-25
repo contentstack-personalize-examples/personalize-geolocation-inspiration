@@ -1,7 +1,14 @@
-import contentstack, { QueryOperation } from "@contentstack/delivery-sdk"
-import ContentstackLivePreview, { IStackSdk } from "@contentstack/live-preview-utils";
-import { getContentstackEndpoints, getRegionForString } from "@timbenniks/contentstack-endpoints";
-import { Page } from "./types";
+import contentstack, { QueryOperation } from '@contentstack/delivery-sdk';
+import ContentstackLivePreview, {
+  IStackSdk,
+} from '@contentstack/live-preview-utils';
+import Personalize from '@contentstack/personalize-edge-sdk';
+import {
+  getContentstackEndpoints,
+  getRegionForString,
+} from '@timbenniks/contentstack-endpoints';
+
+import { Page } from './types';
 
 const region = getRegionForString(process.env.NEXT_PUBLIC_CONTENTSTACK_REGION as string)
 const endpoints = getContentstackEndpoints(region, true)
@@ -50,16 +57,27 @@ export function initLivePreview() {
   });
 }
 
-export async function getPage(url: string) {
-  const result = await stack
-    .contentType("page")
+export async function getPage(
+  url: string,
+  contentType: string,
+  referencedContentTypes: string[],
+  variantParam?: string
+) {
+  // Create the base entry query
+  const entryCall = stack
+    .contentType(contentType)
     .entry()
-    .query()
-    .where("url", QueryOperation.EQUALS, url)
-    .find<Page>();
+    .includeReference(...referencedContentTypes);
+
+  // If variant parameter is provided, convert it to variant aliases and include them
+  const variantAliases = variantParam ? Personalize.variantParamToVariantAliases(variantParam) : [];
+  
+  // Use variants on the entry call, then query
+  const result = await entryCall.variants(variantAliases).query().where('url', QueryOperation.EQUALS, url).find<Page>();
+
 
   if (result.entries) {
-    const entry = result.entries[0]
+    const entry = result.entries[0];
 
     if (process.env.NEXT_PUBLIC_CONTENTSTACK_PREVIEW === 'true') {
       contentstack.Utils.addEditableTags(entry, 'page', true);
