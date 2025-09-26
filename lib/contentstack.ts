@@ -62,7 +62,7 @@ export async function getPage(
   contentType: string,
   referencedContentTypes: string[],
   variantParam?: string
-) {
+): Promise<Page | null> {
   // Create the base entry query
   const entryCall = stack
     .contentType(contentType)
@@ -85,4 +85,6 @@ export async function getPage(
 
     return entry;
   }
+
+  return null;
 }

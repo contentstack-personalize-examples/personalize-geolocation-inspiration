@@ -1,8 +1,42 @@
+export interface VariantMetadata {
+  time: string;
+  user: string;
+  version: number;
+  environment: string;
+  locale: string;
+  alias: string;
+  $: {
+    time: {
+      "data-cslp": string;
+    };
+    user: {
+      "data-cslp": string;
+    };
+    version: {
+      "data-cslp": string;
+    };
+    environment: {
+      "data-cslp": string;
+    };
+    locale: {
+      "data-cslp": string;
+    };
+    alias: {
+      "data-cslp": string;
+    };
+  };
+}
+
+export interface Variants {
+  [variantId: string]: VariantMetadata;
+}
+
 export interface PublishDetails {
   environment: string;
   locale: string;
   time: string;
   user: string;
+  variants: Variants;
 }
 
 export interface File {
