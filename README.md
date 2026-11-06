@@ -14,7 +14,7 @@ This example demonstrates geolocation-based personalization using Contentstack P
 
 ## Prerequisites
 
-- Node.js 18+ installed
+- Node.js 26 (Active LTS) installed. An `.nvmrc` is included, so `nvm use` picks the right version
 - Contentstack account
 - Basic understanding of Next.js and React
 
@@ -139,7 +139,7 @@ Visit `http://localhost:3000` to see your personalized site!
 
 ### Middleware Configuration (`USE_NEXT_MIDDLEWARE`)
 
-This variable controls whether Next.js middleware is used for geolocation detection:
+This variable controls whether the Next.js proxy (`proxy.ts`, formerly `middleware.ts`) is used for geolocation detection:
 
 - **Set to `true`**: For local development and Vercel deployments
 - **Set to `false`**: For Contentstack Launch deployments (Launch handles geolocation automatically)
@@ -160,7 +160,7 @@ This variable controls whether Next.js middleware is used for geolocation detect
 ├── lib/
 │   ├── contentstack.ts          # Contentstack SDK configuration
 │   └── types.ts                 # TypeScript type definitions
-├── middleware.ts                # Geolocation middleware (when USE_NEXT_MIDDLEWARE=true)
+├── proxy.ts                     # Next.js proxy for personalization (when USE_NEXT_MIDDLEWARE=true)
 ├── functions/
 │   └── [proxy].edge.js          # Edge function for Launch deployments
 └── stack/                       # Complete stack configuration for import
