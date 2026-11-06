@@ -5,7 +5,7 @@ import {
 
 import Personalize from '@contentstack/personalize-edge-sdk';
 
-export default async function middleware(req: NextRequest) {
+export default async function proxy(req: NextRequest) {
   const projectUid = process.env.NEXT_PUBLIC_CONTENTSTACK_PERSONALIZE_PROJECT_UID as string;
 
   if (process.env.USE_NEXT_MIDDLEWARE !== 'true' || !projectUid) {
